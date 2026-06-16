@@ -1,0 +1,114 @@
+<svg width="100%" viewBox="0 0 1320 852" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Print Shop page and route map: every Astro route grouped by the four-folder role convention, gated by the middleware guard.</title>
+<desc>A route map. An access ladder across the top shows roles are cumulative: Guest signs up to Member, who can be promoted to Moderator then Admin, and each role can reach every zone to its left. Below, four zones list every route: public pages open to all, the member zone under /mem, the moderator zone under /mod, and the admin zone under /admin including the three treasury views. The Astro middleware guard gates the three private zones by URL prefix. A core-journeys panel traces the discover-and-buy and create-and-sell flows through the pages.</desc>
+<style>
+text { font-family: "Anthropic Sans", -apple-system, "system-ui", "Segoe UI", sans-serif; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="0" y="0" width="1320" height="852" fill="#1c1b19"/>
+
+<text x="660" y="36" text-anchor="middle" fill="#faf9f5" font-size="18" font-weight="600">Page &amp; route map</text>
+<text x="660" y="57" text-anchor="middle" fill="#b5b3aa" font-size="12">Astro file-based routing, grouped by the four-folder role convention &#183; as of 2026-06-16</text>
+
+<!-- ===== ACCESS LADDER ===== -->
+<rect x="310" y="76" width="130" height="34" rx="8" fill="#45443f" stroke="#b4b2a9" stroke-width="0.75"/>
+<text x="375" y="98" text-anchor="middle" fill="#d3d1c7" font-size="12" font-weight="600">Guest</text>
+<text x="470" y="88" text-anchor="middle" fill="#8a8980" font-size="9">sign up</text>
+<line x1="442" y1="93" x2="498" y2="93" stroke="#8a8980" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="500" y="76" width="130" height="34" rx="8" fill="#085041" stroke="#5dcaa5" stroke-width="0.75"/>
+<text x="565" y="98" text-anchor="middle" fill="#9fe1cb" font-size="12" font-weight="600">Member</text>
+<text x="660" y="88" text-anchor="middle" fill="#8a8980" font-size="9">promote</text>
+<line x1="632" y1="93" x2="688" y2="93" stroke="#8a8980" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="690" y="76" width="140" height="34" rx="8" fill="#3c3489" stroke="#afa9ec" stroke-width="0.75"/>
+<text x="760" y="98" text-anchor="middle" fill="#cecbf6" font-size="12" font-weight="600">Moderator</text>
+<text x="860" y="88" text-anchor="middle" fill="#8a8980" font-size="9">promote</text>
+<line x1="832" y1="93" x2="888" y2="93" stroke="#8a8980" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="890" y="76" width="130" height="34" rx="8" fill="#633806" stroke="#ef9f27" stroke-width="0.75"/>
+<text x="955" y="98" text-anchor="middle" fill="#facb75" font-size="12" font-weight="600">Admin</text>
+
+<text x="660" y="128" text-anchor="middle" fill="#b5b3aa" font-size="10">access is cumulative &#8212; each role can also reach every zone to its left; zone colour = the minimum role the URL prefix requires</text>
+
+<!-- ===== GUARD / OPEN TAGS ===== -->
+<rect x="24" y="148" width="300" height="22" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/>
+<text x="174" y="163" text-anchor="middle" fill="#9ce6bb" font-size="10">open &#183; no sign-in required</text>
+
+<rect x="336" y="148" width="960" height="22" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="1" stroke-dasharray="5 3"/>
+<text x="816" y="163" text-anchor="middle" fill="#f0c6c6" font-size="10">src/middleware.ts role guard &#8212; URL prefix maps to required role, otherwise 403  (then every Convex function re-checks)</text>
+
+<!-- ===== PUBLIC ZONE ===== -->
+<rect x="24" y="176" width="300" height="344" rx="12" fill="#45443f" stroke="#b4b2a9" stroke-width="0.75"/>
+<text x="40" y="200" fill="#d3d1c7" font-size="13" font-weight="600">Public &#8212; pages/</text>
+<rect x="36" y="212" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="230" font-size="10.5"><tspan fill="#d3d1c7">/</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Home &#183; featured / recent</tspan></text>
+<rect x="36" y="246" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="264" font-size="10.5"><tspan fill="#d3d1c7">/browse</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Browse grid</tspan></text>
+<rect x="36" y="280" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="298" font-size="10.5"><tspan fill="#d3d1c7">/design/[id]</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Design detail &#183; buy</tspan></text>
+<rect x="36" y="314" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="332" font-size="10.5"><tspan fill="#d3d1c7">/designer/[handle]</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Designer profile</tspan></text>
+<rect x="36" y="348" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="366" font-size="10.5"><tspan fill="#d3d1c7">/collection/[slug]</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Collection</tspan></text>
+<rect x="36" y="382" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="400" font-size="10.5"><tspan fill="#d3d1c7">/category/[slug]</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">Category</tspan></text>
+<rect x="36" y="416" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="434" font-size="10.5"><tspan fill="#d3d1c7">sign in / sign up</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">auth pages (M1)</tspan></text>
+<rect x="36" y="450" width="276" height="28" rx="7" fill="#3b3a36" stroke="#b4b2a9" stroke-width="0.5"/><text x="48" y="468" font-size="10.5"><tspan fill="#d3d1c7">403 / 404 / 500</tspan><tspan fill="#b4b2a9" dx="10" font-size="9">error pages (M13)</tspan></text>
+<text x="40" y="500" fill="#7d7c75" font-size="9">guest can browse + sign up; everything else needs a role</text>
+
+<!-- ===== MEMBER ZONE ===== -->
+<rect x="336" y="176" width="300" height="344" rx="12" fill="#085041" stroke="#5dcaa5" stroke-width="0.75"/>
+<text x="352" y="200" fill="#9fe1cb" font-size="13" font-weight="600">Member &#8212; pages/mem/</text>
+<rect x="348" y="212" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="230" font-size="10.5"><tspan fill="#c6efe0">/mem</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Dashboard</tspan></text>
+<rect x="348" y="246" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="264" font-size="10.5"><tspan fill="#c6efe0">/mem/credits</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Balance + history</tspan></text>
+<rect x="348" y="280" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="298" font-size="10.5"><tspan fill="#c6efe0">/mem/generate</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Generate</tspan></text>
+<rect x="348" y="314" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="332" font-size="10.5"><tspan fill="#c6efe0">/mem/gallery</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Gallery</tspan></text>
+<rect x="348" y="348" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="366" font-size="10.5"><tspan fill="#c6efe0">/mem/designs</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">My designs</tspan></text>
+<rect x="348" y="382" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="400" font-size="10.5"><tspan fill="#c6efe0">/mem/designs/[id]/edit</tspan><tspan fill="#5dcaa5" dx="8" font-size="9">Editor</tspan></text>
+<rect x="348" y="416" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="434" font-size="10.5"><tspan fill="#c6efe0">/mem/orders</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Purchases</tspan></text>
+<rect x="348" y="450" width="276" height="28" rx="7" fill="#06352b" stroke="#5dcaa5" stroke-width="0.5"/><text x="360" y="468" font-size="10.5"><tspan fill="#c6efe0">/mem/sales</tspan><tspan fill="#5dcaa5" dx="10" font-size="9">Sales (no buyer identity)</tspan></text>
+<line x1="342" y1="298" x2="342" y2="358" stroke="#5dca8d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- ===== MODERATOR ZONE ===== -->
+<rect x="648" y="176" width="276" height="208" rx="12" fill="#3c3489" stroke="#afa9ec" stroke-width="0.75"/>
+<text x="664" y="200" fill="#cecbf6" font-size="13" font-weight="600">Moderator &#8212; pages/mod/</text>
+<rect x="660" y="212" width="252" height="28" rx="7" fill="#2b2566" stroke="#afa9ec" stroke-width="0.5"/><text x="672" y="230" font-size="10.5"><tspan fill="#cecbf6">/mod/review</tspan><tspan fill="#afa9ec" dx="10" font-size="9">Review queue</tspan></text>
+<rect x="660" y="246" width="252" height="28" rx="7" fill="#2b2566" stroke="#afa9ec" stroke-width="0.5"/><text x="672" y="264" font-size="10.5"><tspan fill="#cecbf6">/mod/flagged</tspan><tspan fill="#afa9ec" dx="10" font-size="9">Flag queue</tspan></text>
+<rect x="660" y="280" width="252" height="28" rx="7" fill="#2b2566" stroke="#afa9ec" stroke-width="0.5"/><text x="672" y="298" font-size="10.5"><tspan fill="#cecbf6">/mod/collections</tspan><tspan fill="#afa9ec" dx="10" font-size="9">Collections</tspan></text>
+<rect x="660" y="314" width="252" height="28" rx="7" fill="#2b2566" stroke="#afa9ec" stroke-width="0.5"/><text x="672" y="332" font-size="10.5"><tspan fill="#cecbf6">/mod/featured</tspan><tspan fill="#afa9ec" dx="10" font-size="9">Featured</tspan></text>
+<text x="664" y="364" fill="#afa9ec" font-size="9">two hats: gatekeeper (review) + editor (curation)</text>
+
+<!-- ===== ADMIN ZONE ===== -->
+<rect x="936" y="176" width="360" height="500" rx="12" fill="#633806" stroke="#ef9f27" stroke-width="0.75"/>
+<text x="952" y="200" fill="#facb75" font-size="13" font-weight="600">Admin &#8212; pages/admin/</text>
+<rect x="948" y="210" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="227" font-size="10"><tspan fill="#f6d9a4">/admin</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Home</tspan></text>
+<rect x="948" y="240" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="257" font-size="10"><tspan fill="#f6d9a4">/admin/users</tspan><tspan fill="#ef9f27" dx="10" font-size="9">User list</tspan></text>
+<rect x="948" y="270" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="287" font-size="10"><tspan fill="#f6d9a4">/admin/users/[id]</tspan><tspan fill="#ef9f27" dx="10" font-size="9">User detail / audit</tspan></text>
+<rect x="948" y="300" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="317" font-size="10"><tspan fill="#f6d9a4">/admin/tiers</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Earning tiers</tspan></text>
+<rect x="948" y="330" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="347" font-size="10"><tspan fill="#f6d9a4">/admin/grant-credits</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Mint + grant</tspan></text>
+<rect x="948" y="360" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="377" font-size="10"><tspan fill="#f6d9a4">/admin/presets</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Style presets</tspan></text>
+<rect x="948" y="390" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="407" font-size="10"><tspan fill="#f6d9a4">/admin/blocklist</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Prompt blocklist</tspan></text>
+<rect x="948" y="420" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="437" font-size="10"><tspan fill="#f6d9a4">/admin/categories</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Categories</tspan></text>
+<rect x="948" y="450" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="467" font-size="10"><tspan fill="#f6d9a4">/admin/settings</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Platform settings</tspan></text>
+<rect x="948" y="480" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="497" font-size="10"><tspan fill="#f6d9a4">/admin/treasury/credit-economy</tspan><tspan fill="#ef9f27" dx="8" font-size="9">in-app</tspan></text>
+<rect x="948" y="510" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="527" font-size="10"><tspan fill="#f6d9a4">/admin/treasury/real-money</tspan><tspan fill="#ef9f27" dx="8" font-size="9">API spend</tspan></text>
+<rect x="948" y="540" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="557" font-size="10"><tspan fill="#f6d9a4">/admin/treasury/bridge</tspan><tspan fill="#ef9f27" dx="8" font-size="9">P&amp;L bridge</tspan></text>
+<rect x="948" y="570" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="587" font-size="10"><tspan fill="#f6d9a4">/admin/generation-log</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Generations</tspan></text>
+<rect x="948" y="600" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="617" font-size="10"><tspan fill="#f6d9a4">/admin/transaction-log</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Ledger</tspan></text>
+<rect x="948" y="630" width="336" height="26" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.5"/><text x="960" y="647" font-size="10"><tspan fill="#f6d9a4">/admin/api-topups</tspan><tspan fill="#ef9f27" dx="10" font-size="9">Manual API top-ups</tspan></text>
+
+<!-- ===== CORE JOURNEYS PANEL ===== -->
+<rect x="24" y="694" width="1272" height="70" rx="10" fill="#26251f" stroke="#6f6e68" stroke-width="0.75"/>
+<text x="40" y="714" fill="#c2c0b6" font-size="11" font-weight="600">Core journeys</text>
+<text x="40" y="734" fill="#b5b3aa" font-size="10.5">Discover &amp; buy:&#160;&#160; /  &#8594;  /browse  &#8594;  /design/[id]  &#8594;  (buy)  &#8594;  /mem/orders</text>
+<text x="40" y="753" fill="#b5b3aa" font-size="10.5">Create &amp; sell:&#160;&#160; /mem/generate  &#8594;  /mem/gallery  &#8594;  (publish)  &#8594;  /mem/designs  &#8594;  /mod/review  &#8594;  (approve)  &#8594;  back to /browse &amp; /designer/[handle]</text>
+
+<!-- ===== LEGEND + FOOTER ===== -->
+<rect x="24" y="782" width="12" height="12" rx="2" fill="#45443f"/><text x="42" y="792" fill="#c2c0b6" font-size="10">Public (guest)</text>
+<rect x="150" y="782" width="12" height="12" rx="2" fill="#085041"/><text x="168" y="792" fill="#c2c0b6" font-size="10">Member</text>
+<rect x="250" y="782" width="12" height="12" rx="2" fill="#3c3489"/><text x="268" y="792" fill="#c2c0b6" font-size="10">Moderator</text>
+<rect x="360" y="782" width="12" height="12" rx="2" fill="#633806"/><text x="378" y="792" fill="#c2c0b6" font-size="10">Admin</text>
+<rect x="450" y="782" width="12" height="12" rx="2" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="468" y="792" fill="#c2c0b6" font-size="10">middleware guard</text>
+<line x1="600" y1="788" x2="630" y2="788" stroke="#5dca8d" stroke-width="1.5" marker-end="url(#arrow)"/><text x="636" y="792" fill="#c2c0b6" font-size="10">navigation</text>
+
+<text x="24" y="820" fill="#b5b3aa" font-size="10">35 routes, all confirmed in MILESTONES.md. Auth and error pages have no fixed path in the docs yet, so they are labelled, not invented. The four-folder convention (pages/, pages/mem/, pages/mod/, pages/admin/) maps URL prefix to required role.</text>
+<text x="24" y="838" fill="#b5b3aa" font-size="10">Source: MILESTONES.md (M1-M13 route lists), README (four-folder routing), docs/concepts/owner-permission-pattern.md (defense in depth).</text>
+</svg>

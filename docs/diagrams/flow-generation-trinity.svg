@@ -1,0 +1,127 @@
+<svg width="100%" viewBox="0 0 1180 980" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Generation flow: how one image generation orchestrates an action, a query, two mutations and the OpenAI API, with a refund on failure.</title>
+<desc>A UML sequence diagram. Lifelines left to right: the Member's browser island, the generateImage action, a query, a mutation, and the OpenAI image API. The action reads the balance and preset via a query, guards on balance, rate limit and blocklist, charges credits and creates a pending generation row in one atomic mutation, then calls OpenAI. On success it stores the image and finalizes; on failure it refunds the credits with a compensating mutation and re-throws. The teaching point: actions are not transactional, so the committed charge is reversed by a new compensating ledger row rather than rolled back.</desc>
+<style>
+text { font-family: "Anthropic Sans", -apple-system, "system-ui", "Segoe UI", sans-serif; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="0" y="0" width="1180" height="980" fill="#1c1b19"/>
+
+<text x="590" y="38" text-anchor="middle" fill="#faf9f5" font-size="18" font-weight="600">Generation flow &#8212; the action / mutation / query trinity</text>
+<text x="590" y="59" text-anchor="middle" fill="#b5b3aa" font-size="12">charge in a mutation &#183; call OpenAI in an action &#183; refund on failure &#183; as of 2026-06-16</text>
+
+<!-- ===== LIFELINE HEADS ===== -->
+<rect x="55" y="80" width="150" height="54" rx="10" fill="#45443f" stroke="#b4b2a9" stroke-width="0.75"/>
+<text x="130" y="103" text-anchor="middle" fill="#d3d1c7" font-size="12.5" font-weight="600">Member</text>
+<text x="130" y="121" text-anchor="middle" fill="#b4b2a9" font-size="9.5">browser island</text>
+
+<rect x="305" y="80" width="150" height="54" rx="10" fill="#0c447c" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="380" y="103" text-anchor="middle" fill="#b5d4f4" font-size="12.5" font-weight="600">generateImage</text>
+<text x="380" y="121" text-anchor="middle" fill="#85b7eb" font-size="9.5">action</text>
+
+<rect x="535" y="80" width="150" height="54" rx="10" fill="#0c447c" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="610" y="103" text-anchor="middle" fill="#b5d4f4" font-size="12.5" font-weight="600">credits / presets</text>
+<text x="610" y="121" text-anchor="middle" fill="#85b7eb" font-size="9.5">query</text>
+
+<rect x="775" y="80" width="150" height="54" rx="10" fill="#0c447c" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="850" y="103" text-anchor="middle" fill="#b5d4f4" font-size="12.5" font-weight="600">generations</text>
+<text x="850" y="121" text-anchor="middle" fill="#85b7eb" font-size="9.5">mutation</text>
+
+<rect x="1005" y="80" width="150" height="54" rx="10" fill="#633806" stroke="#ef9f27" stroke-width="0.75"/>
+<text x="1080" y="103" text-anchor="middle" fill="#facb75" font-size="12.5" font-weight="600">OpenAI image API</text>
+<text x="1080" y="121" text-anchor="middle" fill="#ef9f27" font-size="9.5">external</text>
+
+<!-- ===== LIFELINES ===== -->
+<line x1="130" y1="134" x2="130" y2="846" stroke="#b4b2a9" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+<line x1="380" y1="134" x2="380" y2="846" stroke="#85b7eb" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+<line x1="610" y1="134" x2="610" y2="846" stroke="#85b7eb" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+<line x1="850" y1="134" x2="850" y2="846" stroke="#85b7eb" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+<line x1="1080" y1="134" x2="1080" y2="846" stroke="#ef9f27" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+
+<!-- m1 -->
+<text x="255" y="170" text-anchor="middle" fill="#c2c0b6" font-size="10">useAction generateImage(rawPrompt, presetId)</text>
+<line x1="130" y1="178" x2="378" y2="178" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- m2 -->
+<text x="495" y="206" text-anchor="middle" fill="#c2c0b6" font-size="10">runQuery presets.getById + credits.getMyBalance</text>
+<line x1="382" y1="214" x2="608" y2="214" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- m3 return -->
+<text x="495" y="240" text-anchor="middle" fill="#85b7eb" font-size="10">preset { creditCost, prefix, suffix } &#183; balance</text>
+<line x1="608" y1="248" x2="382" y2="248" stroke="#b4b2a9" stroke-width="1.25" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+<!-- guard activation on action -->
+<rect x="232" y="270" width="296" height="46" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="380" y="289" text-anchor="middle" fill="#b5d4f4" font-size="10.5" font-weight="500">guard, fail fast (in the action):</text>
+<text x="380" y="306" text-anchor="middle" fill="#85b7eb" font-size="9.5">balance &#8805; cost?&#160;&#160;rate-limit ok?&#160;&#160;blocklist ok?  else throw</text>
+
+<!-- m5 -->
+<text x="615" y="346" text-anchor="middle" fill="#c2c0b6" font-size="10">runMutation startAndCharge(rawPrompt, presetId)</text>
+<line x1="382" y1="354" x2="848" y2="354" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- mutation activation: charge + insert ATOMIC -->
+<rect x="668" y="376" width="364" height="60" rx="8" fill="#0a3a6b" stroke="#5dca8d" stroke-width="1"/>
+<text x="850" y="396" text-anchor="middle" fill="#9ce6bb" font-size="10.5" font-weight="600">ONE atomic transaction</text>
+<text x="850" y="413" text-anchor="middle" fill="#d6e6f9" font-size="9.5">chargeUser(-creditCost, 'generation_charge')</text>
+<text x="850" y="428" text-anchor="middle" fill="#d6e6f9" font-size="9.5">+ insert generations { status: pending }</text>
+
+<!-- m7 return -->
+<text x="615" y="460" text-anchor="middle" fill="#f0c6c6" font-size="10">generationId &#8212; the charge is now COMMITTED</text>
+<line x1="848" y1="468" x2="382" y2="468" stroke="#b4b2a9" stroke-width="1.25" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+<!-- m8 action -> openai -->
+<text x="730" y="496" text-anchor="middle" fill="#ef9f27" font-size="10">fetch /v1/images/generations(wrapped prompt) &#8212; only actions may call APIs</text>
+<line x1="382" y1="504" x2="1078" y2="504" stroke="#ef9f27" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- ===== SUCCESS BRANCH ===== -->
+<rect x="48" y="528" width="1084" height="134" rx="10" fill="none" stroke="#5dca8d" stroke-width="0.75" stroke-dasharray="2 3"/>
+<rect x="60" y="520" width="172" height="20" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/>
+<text x="146" y="534" text-anchor="middle" fill="#9ce6bb" font-size="10" font-weight="600">alt&#160;&#160;[ OpenAI succeeds ]</text>
+
+<text x="730" y="560" text-anchor="middle" fill="#5dca8d" font-size="10">image bytes</text>
+<line x1="1078" y1="568" x2="382" y2="568" stroke="#5dca8d" stroke-width="1.25" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+<rect x="232" y="582" width="296" height="22" rx="6" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="380" y="597" text-anchor="middle" fill="#d6e6f9" font-size="9.5">ctx.storage.store(bytes) &#8594; storageId</text>
+
+<text x="615" y="624" text-anchor="middle" fill="#c2c0b6" font-size="10">runMutation finalizeSuccess(storageId, tokensConsumed)</text>
+<line x1="382" y1="632" x2="848" y2="632" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="850" y="654" text-anchor="middle" fill="#9ce6bb" font-size="9.5">patch generations { status: succeeded, storageId }</text>
+
+<!-- ===== FAILURE BRANCH ===== -->
+<rect x="48" y="676" width="1084" height="150" rx="10" fill="none" stroke="#ef9f27" stroke-width="0.75" stroke-dasharray="2 3"/>
+<rect x="60" y="668" width="200" height="20" rx="6" fill="#4f2c05" stroke="#ef9f27" stroke-width="0.75"/>
+<text x="160" y="682" text-anchor="middle" fill="#facb75" font-size="10" font-weight="600">alt&#160;&#160;[ OpenAI fails (catch) ]</text>
+
+<text x="730" y="708" text-anchor="middle" fill="#ef9f27" font-size="10">error / timeout</text>
+<line x1="1078" y1="716" x2="382" y2="716" stroke="#ef9f27" stroke-width="1.25" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+<text x="615" y="744" text-anchor="middle" fill="#ef9f27" font-size="10">runMutation finalizeFailureAndRefund(reason)</text>
+<line x1="382" y1="752" x2="848" y2="752" stroke="#ef9f27" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="668" y="766" width="364" height="44" rx="8" fill="#4f2c05" stroke="#ef9f27" stroke-width="1"/>
+<text x="850" y="785" text-anchor="middle" fill="#facb75" font-size="10" font-weight="600">compensating transaction (NOT a rollback)</text>
+<text x="850" y="801" text-anchor="middle" fill="#f6d9a4" font-size="9.5">refundUser(+creditCost, 'generation_refund') + patch { failed }</text>
+
+<text x="255" y="838" text-anchor="middle" fill="#ef9f27" font-size="10">re-throw error to the member</text>
+<line x1="378" y1="846" x2="130" y2="846" stroke="#ef9f27" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- ===== TEACHING CALLOUT ===== -->
+<rect x="48" y="866" width="1084" height="46" rx="9" fill="#3a2410" stroke="#ef9f27" stroke-width="1"/>
+<text x="64" y="886" fill="#facb75" font-size="10.5" font-weight="600">Why the refund instead of a rollback?</text>
+<text x="64" y="903" fill="#f6d9a4" font-size="10">Actions are NOT transactional. The charge committed at "generationId"; a later failure cannot undo it. The fix is a new compensating ledger row &#8212; append-only thinking.</text>
+
+<!-- ===== LEGEND + FOOTER ===== -->
+<line x1="48" y1="934" x2="78" y2="934" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="84" y="938" fill="#c2c0b6" font-size="10">call</text>
+<line x1="130" y1="934" x2="160" y2="934" stroke="#b4b2a9" stroke-width="1.25" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+<text x="166" y="938" fill="#c2c0b6" font-size="10">return</text>
+<line x1="222" y1="934" x2="252" y2="934" stroke="#ef9f27" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="258" y="938" fill="#c2c0b6" font-size="10">failure / external</text>
+<rect x="370" y="927" width="12" height="12" rx="2" fill="#0a3a6b" stroke="#5dca8d" stroke-width="1"/>
+<text x="388" y="938" fill="#c2c0b6" font-size="10">atomic mutation work</text>
+<text x="700" y="938" fill="#b5b3aa" font-size="10">Source: docs/concepts/convex-actions-vs-mutations.md, append-only-ledger.md, MILESTONES M6/M7.</text>
+</svg>

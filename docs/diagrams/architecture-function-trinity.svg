@@ -1,0 +1,92 @@
+<svg width="100%" viewBox="0 0 1080 730" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Queries vs mutations vs actions: a capability matrix of what each Convex function kind may and may not do.</title>
+<desc>A grid. Columns are the three Convex function kinds: query, mutation and action. Rows are capabilities: read the database, write the database, call external APIs, be reactive, be transactional, be deterministic, read secrets, call other functions, schedule future work, and the frontend hook. Cells show yes, no, or a qualifier such as via runQuery. The pattern: queries answer questions, mutations change state, and actions touch the outside world.</desc>
+<style>
+text { font-family: "Anthropic Sans", -apple-system, "system-ui", "Segoe UI", sans-serif; }
+</style>
+
+<rect x="0" y="0" width="1080" height="730" fill="#1c1b19"/>
+
+<text x="540" y="38" text-anchor="middle" fill="#faf9f5" font-size="18" font-weight="600">Queries vs Mutations vs Actions</text>
+<text x="540" y="59" text-anchor="middle" fill="#b5b3aa" font-size="12">what each Convex function kind may touch &#183; the most important Convex distinction &#183; as of 2026-06-16</text>
+
+<!-- header -->
+<text x="52" y="120" fill="#c2c0b6" font-size="12.5" font-weight="600">Capability</text>
+<rect x="476" y="92" width="178" height="46" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="565" y="112" text-anchor="middle" fill="#b5d4f4" font-size="13" font-weight="600">query</text>
+<text x="565" y="128" text-anchor="middle" fill="#85b7eb" font-size="9">answers questions</text>
+<rect x="672" y="92" width="178" height="46" rx="8" fill="#0c447c" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="761" y="112" text-anchor="middle" fill="#b5d4f4" font-size="13" font-weight="600">mutation</text>
+<text x="761" y="128" text-anchor="middle" fill="#85b7eb" font-size="9">changes state</text>
+<rect x="868" y="92" width="178" height="46" rx="8" fill="#633806" stroke="#ef9f27" stroke-width="0.75"/>
+<text x="957" y="112" text-anchor="middle" fill="#facb75" font-size="13" font-weight="600">action</text>
+<text x="957" y="128" text-anchor="middle" fill="#ef9f27" font-size="9">touches the outside world</text>
+
+<!-- Row 1: Read DB -->
+<text x="52" y="174" fill="#d3d1c7" font-size="11.5">Read the database&#160;&#160;<tspan fill="#7d7c75" font-size="9">ctx.db.get / query</tspan></text>
+<rect x="476" y="156" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="565" y="180" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="672" y="156" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="180" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="868" y="156" width="178" height="38" rx="6" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="957" y="179" text-anchor="middle" fill="#f5c4b3" font-size="10">via runQuery</text>
+
+<!-- Row 2: Write DB -->
+<text x="52" y="224" fill="#d3d1c7" font-size="11.5">Write the database&#160;&#160;<tspan fill="#7d7c75" font-size="9">insert / patch / delete</tspan></text>
+<rect x="476" y="206" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="565" y="230" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="672" y="206" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="230" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="868" y="206" width="178" height="38" rx="6" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="957" y="229" text-anchor="middle" fill="#f5c4b3" font-size="10">via runMutation</text>
+
+<!-- Row 3: External APIs -->
+<text x="52" y="274" fill="#d3d1c7" font-size="11.5">Call external APIs&#160;&#160;<tspan fill="#7d7c75" font-size="9">fetch, OpenAI, Stripe</tspan></text>
+<rect x="476" y="256" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="565" y="280" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="672" y="256" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="761" y="280" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="868" y="256" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="957" y="280" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+
+<!-- Row 4: Reactive -->
+<text x="52" y="324" fill="#d3d1c7" font-size="11.5">Reactive&#160;&#160;<tspan fill="#7d7c75" font-size="9">clients auto-update on change</tspan></text>
+<rect x="476" y="306" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="565" y="330" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="672" y="306" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="761" y="330" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="868" y="306" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="957" y="330" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+
+<!-- Row 5: Transactional -->
+<text x="52" y="374" fill="#d3d1c7" font-size="11.5">Transactional&#160;&#160;<tspan fill="#7d7c75" font-size="9">atomic, all-or-nothing</tspan></text>
+<rect x="476" y="356" width="178" height="38" rx="6" fill="#2a2926" stroke="#6f6e68" stroke-width="0.75"/><text x="565" y="379" text-anchor="middle" fill="#9a988f" font-size="10">n/a (read-only)</text>
+<rect x="672" y="356" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="380" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="868" y="356" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="957" y="379" text-anchor="middle" fill="#f0c6c6" font-size="10">&#10007; (compensate)</text>
+
+<!-- Row 6: Deterministic -->
+<text x="52" y="424" fill="#d3d1c7" font-size="11.5">Must be deterministic&#160;&#160;<tspan fill="#7d7c75" font-size="9">no random / wall-clock</tspan></text>
+<rect x="476" y="406" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="565" y="429" text-anchor="middle" fill="#9ce6bb" font-size="10">required</text>
+<rect x="672" y="406" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="429" text-anchor="middle" fill="#9ce6bb" font-size="10">required</text>
+<rect x="868" y="406" width="178" height="38" rx="6" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="957" y="429" text-anchor="middle" fill="#f5c4b3" font-size="10">no &#8212; may be non-det</text>
+
+<!-- Row 7: Secrets -->
+<text x="52" y="474" fill="#d3d1c7" font-size="11.5">Read secrets / env vars&#160;&#160;<tspan fill="#7d7c75" font-size="9">API keys</tspan></text>
+<rect x="476" y="456" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="565" y="480" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="672" y="456" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="761" y="480" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="868" y="456" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="957" y="480" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+
+<!-- Row 8: Call other functions -->
+<text x="52" y="524" fill="#d3d1c7" font-size="11.5">Call other functions&#160;&#160;<tspan fill="#7d7c75" font-size="9">runQuery / runMutation</tspan></text>
+<rect x="476" y="506" width="178" height="38" rx="6" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="565" y="529" text-anchor="middle" fill="#f5c4b3" font-size="10">queries (rare)</text>
+<rect x="672" y="506" width="178" height="38" rx="6" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="761" y="529" text-anchor="middle" fill="#f5c4b3" font-size="10">mutations (rare)</text>
+<rect x="868" y="506" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="957" y="529" text-anchor="middle" fill="#9ce6bb" font-size="10">&#10003; orchestrates all</text>
+
+<!-- Row 9: Schedule -->
+<text x="52" y="574" fill="#d3d1c7" font-size="11.5">Schedule future work&#160;&#160;<tspan fill="#7d7c75" font-size="9">ctx.scheduler</tspan></text>
+<rect x="476" y="556" width="178" height="38" rx="6" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="565" y="580" text-anchor="middle" fill="#f0c6c6" font-size="12">&#10007;</text>
+<rect x="672" y="556" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="580" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+<rect x="868" y="556" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="957" y="580" text-anchor="middle" fill="#9ce6bb" font-size="12">&#10003;</text>
+
+<!-- Row 10: Frontend hook -->
+<text x="52" y="624" fill="#d3d1c7" font-size="11.5">Frontend hook</text>
+<rect x="476" y="606" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="565" y="629" text-anchor="middle" fill="#9ce6bb" font-size="10">useQuery</text>
+<rect x="672" y="606" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="761" y="629" text-anchor="middle" fill="#9ce6bb" font-size="10">useMutation</text>
+<rect x="868" y="606" width="178" height="38" rx="6" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="957" y="629" text-anchor="middle" fill="#9ce6bb" font-size="10">useAction</text>
+
+<!-- legend + footer -->
+<rect x="52" y="664" width="14" height="14" rx="3" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="72" y="675" fill="#c2c0b6" font-size="10">can</text>
+<rect x="132" y="664" width="14" height="14" rx="3" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="152" y="675" fill="#c2c0b6" font-size="10">cannot</text>
+<rect x="226" y="664" width="14" height="14" rx="3" fill="#712b13" stroke="#f0997b" stroke-width="0.75"/><text x="246" y="675" fill="#c2c0b6" font-size="10">qualified / indirect</text>
+<rect x="386" y="664" width="14" height="14" rx="3" fill="#2a2926" stroke="#6f6e68" stroke-width="0.75"/><text x="406" y="675" fill="#c2c0b6" font-size="10">not applicable</text>
+<text x="540" y="675" fill="#b5b3aa" font-size="10">Determinism is why the kinds are split: queries stay reactive, mutations stay atomic, only actions give it up.</text>
+<text x="52" y="702" fill="#b5b3aa" font-size="10">Source: docs/concepts/convex-actions-vs-mutations.md ("What each kind can and cannot do").</text>
+</svg>

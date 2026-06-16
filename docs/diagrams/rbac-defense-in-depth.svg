@@ -1,0 +1,100 @@
+<svg width="100%" viewBox="0 0 1220 720" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Defense in depth: how an Astro middleware route guard and per-function Convex checks together enforce access, neither sufficient alone.</title>
+<desc>A request flows left to right through two layers. Layer one is the Astro middleware, a coarse URL-prefix guard that knows the role but not ownership and catches gross access like a guest reaching slash admin. Layer two is every Convex function, which runs a check ladder: requireAuth, then requireRole, then requireOwnerOrAdmin, then a state check, ordered least to most informative, catching fine-grained access like a member editing another member's design. A callout states the function checks are self-sufficient: remove the middleware and the app is still secure.</desc>
+<style>
+text { font-family: "Anthropic Sans", -apple-system, "system-ui", "Segoe UI", sans-serif; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="0" y="0" width="1220" height="720" fill="#1c1b19"/>
+
+<text x="610" y="38" text-anchor="middle" fill="#faf9f5" font-size="18" font-weight="600">Defense in depth &#8212; two layers guard every access</text>
+<text x="610" y="59" text-anchor="middle" fill="#b5b3aa" font-size="12">Astro middleware (coarse) + per-function Convex checks (fine) &#183; neither is sufficient alone &#183; as of 2026-06-16</text>
+
+<!-- request -->
+<rect x="28" y="270" width="150" height="86" rx="10" fill="#45443f" stroke="#b4b2a9" stroke-width="0.75"/>
+<text x="103" y="305" text-anchor="middle" fill="#d3d1c7" font-size="12" font-weight="600">Request</text>
+<text x="103" y="324" text-anchor="middle" fill="#b4b2a9" font-size="9.5">any route +</text>
+<text x="103" y="338" text-anchor="middle" fill="#b4b2a9" font-size="9.5">any function call</text>
+<line x1="178" y1="313" x2="206" y2="313" stroke="#c2c0b6" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- LAYER 1 -->
+<rect x="208" y="92" width="430" height="470" rx="12" fill="#5b1717" stroke="#d98a8a" stroke-width="1" stroke-dasharray="5 3"/>
+<text x="224" y="118" fill="#f0c6c6" font-size="13" font-weight="600">Layer 1 &#183; Astro middleware</text>
+<text x="224" y="136" fill="#d98a8a" font-size="10">src/middleware.ts &#8212; the coarse gate, runs before the page</text>
+
+<rect x="224" y="150" width="398" height="118" rx="9" fill="#4a1414" stroke="#d98a8a" stroke-width="0.75"/>
+<text x="236" y="170" fill="#f0c6c6" font-size="11" font-weight="600">Checks: URL prefix vs the signed-in role</text>
+<text x="236" y="190" fill="#d98a8a" font-size="10">/mem/*&#160;&#160;&#8594; requires member</text>
+<text x="236" y="208" fill="#d98a8a" font-size="10">/mod/*&#160;&#160;&#8594; requires moderator</text>
+<text x="236" y="226" fill="#d98a8a" font-size="10">/admin/* &#8594; requires admin</text>
+<text x="236" y="246" fill="#f0c6c6" font-size="10">otherwise &#8594; redirect to /sign-in or 403</text>
+
+<rect x="224" y="280" width="398" height="86" rx="9" fill="#4a1414" stroke="#d98a8a" stroke-width="0.75"/>
+<text x="236" y="300" fill="#f0c6c6" font-size="11" font-weight="600">Knows</text>
+<text x="236" y="318" fill="#d98a8a" font-size="10">the URL prefix and the user's role</text>
+<text x="236" y="338" fill="#f0c6c6" font-size="11" font-weight="600">Cannot know</text>
+<text x="236" y="356" fill="#d98a8a" font-size="10">who owns design X &#8212; ownership lives in data, not the URL</text>
+
+<rect x="224" y="378" width="398" height="68" rx="9" fill="#2a2926" stroke="#6f6e68" stroke-width="0.75"/>
+<text x="236" y="398" fill="#d3d1c7" font-size="11" font-weight="600">Catches (gross / coarse)</text>
+<text x="236" y="418" fill="#9a988f" font-size="10">a guest hitting /admin/ &#8594; 403</text>
+<text x="236" y="436" fill="#9a988f" font-size="10">a member browsing to /mod/review &#8594; 403</text>
+
+<text x="224" y="492" fill="#d98a8a" font-size="10" font-weight="600">Dashed = a boundary, not the real lock.</text>
+<text x="224" y="510" fill="#d98a8a" font-size="9.5">A determined client can call the Convex function directly,</text>
+<text x="224" y="524" fill="#d98a8a" font-size="9.5">bypassing the page entirely. So this layer cannot be trusted alone.</text>
+
+<line x1="640" y1="313" x2="676" y2="313" stroke="#5dca8d" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="658" y="305" text-anchor="middle" fill="#5dca8d" font-size="9">passes</text>
+
+<!-- LAYER 2 -->
+<rect x="678" y="92" width="510" height="470" rx="12" fill="#0c447c" stroke="#85b7eb" stroke-width="1"/>
+<text x="694" y="118" fill="#b5d4f4" font-size="13" font-weight="600">Layer 2 &#183; every Convex function</text>
+<text x="694" y="136" fill="#85b7eb" font-size="10">the real lock &#8212; the check ladder, least to most informative</text>
+
+<rect x="694" y="148" width="478" height="44" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="706" y="166" fill="#b5d4f4" font-size="11" font-weight="600">1 &#183; requireAuth(ctx)</text>
+<text x="706" y="183" fill="#85b7eb" font-size="9.5">authenticated? else throw &#8212; don't trust the URL</text>
+<line x1="933" y1="192" x2="933" y2="200" stroke="#85b7eb" stroke-width="1.25" marker-end="url(#arrow)"/>
+
+<rect x="694" y="200" width="478" height="44" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="706" y="218" fill="#b5d4f4" font-size="11" font-weight="600">2 &#183; requireRole(ctx, 'moderator')</text>
+<text x="706" y="235" fill="#85b7eb" font-size="9.5">allowed to do this kind of thing at all?</text>
+<line x1="933" y1="244" x2="933" y2="252" stroke="#85b7eb" stroke-width="1.25" marker-end="url(#arrow)"/>
+
+<rect x="694" y="252" width="478" height="44" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="706" y="270" fill="#b5d4f4" font-size="11" font-weight="600">3 &#183; requireOwnerOrAdmin(ctx, record)</text>
+<text x="706" y="287" fill="#85b7eb" font-size="9.5">owns THIS specific record? (admin overrides) &#8212; fetched server-side</text>
+<line x1="933" y1="296" x2="933" y2="304" stroke="#85b7eb" stroke-width="1.25" marker-end="url(#arrow)"/>
+
+<rect x="694" y="304" width="478" height="44" rx="8" fill="#0a3a6b" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="706" y="322" fill="#b5d4f4" font-size="11" font-weight="600">4 &#183; state check</text>
+<text x="706" y="339" fill="#85b7eb" font-size="9.5">e.g. design must be pending/approved &#8212; checked last (most informative)</text>
+<line x1="933" y1="348" x2="933" y2="356" stroke="#5dca8d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="694" y="356" width="478" height="40" rx="8" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/>
+<text x="933" y="381" text-anchor="middle" fill="#9ce6bb" font-size="11" font-weight="600">&#8594; only now: perform the write / return the data</text>
+
+<rect x="694" y="408" width="478" height="64" rx="9" fill="#08335f" stroke="#85b7eb" stroke-width="0.75"/>
+<text x="706" y="428" fill="#b5d4f4" font-size="11" font-weight="600">Catches (fine-grained)</text>
+<text x="706" y="446" fill="#85b7eb" font-size="10">a member editing another member's design &#8594; Forbidden</text>
+<text x="706" y="463" fill="#85b7eb" font-size="10">a generic "Forbidden" leaks nothing about existence or ownership</text>
+
+<text x="694" y="496" fill="#9ce6bb" font-size="10" font-weight="600">Self-sufficient: remove Layer 1 entirely and the app is STILL secure.</text>
+<text x="694" y="514" fill="#85b7eb" font-size="9.5">Every exported function re-checks; internalMutation is the only truly private kind.</text>
+<text x="694" y="528" fill="#85b7eb" font-size="9.5">Convex has no "private" public functions &#8212; anything exported is callable.</text>
+
+<!-- callout -->
+<rect x="208" y="582" width="980" height="62" rx="10" fill="#26251f" stroke="#6f6e68" stroke-width="0.75"/>
+<text x="224" y="604" fill="#c2c0b6" font-size="11" font-weight="600">Defense in depth</text>
+<text x="224" y="624" fill="#b5b3aa" font-size="10.5">Layer 1 blocks gross unauthorized access (cheap, before the page); Layer 2 blocks fine-grained access (authoritative, in the data). The middleware is depth, not the primary defense.</text>
+<text x="224" y="639" fill="#8a8980" font-size="9.5">Source: docs/concepts/owner-permission-pattern.md ("Defense in depth, applied here"), MILESTONES M1, README (Key teaching concepts).</text>
+
+<!-- legend -->
+<rect x="208" y="664" width="12" height="12" rx="2" fill="#5b1717" stroke="#d98a8a" stroke-width="0.75"/><text x="226" y="674" fill="#c2c0b6" font-size="10">Layer 1 &#183; middleware (coarse, dashed = boundary)</text>
+<rect x="470" y="664" width="12" height="12" rx="2" fill="#0c447c" stroke="#85b7eb" stroke-width="0.75"/><text x="488" y="674" fill="#c2c0b6" font-size="10">Layer 2 &#183; function checks (authoritative)</text>
+<rect x="720" y="664" width="12" height="12" rx="2" fill="#0c3d28" stroke="#5dca8d" stroke-width="0.75"/><text x="738" y="674" fill="#c2c0b6" font-size="10">allowed &#8594; proceed</text>
+</svg>
